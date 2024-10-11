@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Base64 Image</title>
+</head>
+<body>
+    <h1>Captured Image</h1>
+    <img id="capturedImage" src="" alt="Captured Face" style="max-width: 100%; height: auto;" />
+    
+    <script>
+        // This is your Base64 encoded image string
+        const base64Image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgCAYAAAA10dzkAAAA..."; // Your Base64 image string
+
+        // Set the src of the image element
+        document.getElementById('capturedImage').src = base64Image;
+    </script>
+</body>
+</html>
