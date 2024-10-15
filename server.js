@@ -61,9 +61,9 @@ app.post('/save', upload.single('photo'), async (req, res) => {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Serve the geolocation.html file (Make sure to provide the correct absolute path)
+// Serve the geolocation.html file
 app.get('/', (req, res) => {
-    const filePath = path.join(__dirname, 'geolocation.html');
-    res.sendFile(filePath); // Serve the HTML file
+    res.sendFile(path.join(__dirname, 'geolocation.html')); // Use correct relative path
 });
 
 // Start the server
