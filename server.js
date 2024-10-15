@@ -6,7 +6,7 @@ const multer = require('multer');
 const fs = require('fs');
 
 const app = express();
-const port = 3500;
+const port = 3500;  // Use the port provided by the environment, or default to 3500
 
 // Middleware to parse JSON requests
 app.use(bodyParser.json({ limit: '10mb' })); // Increase limit to 10MB
@@ -28,8 +28,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Connect to MongoDB Atlas (Updated connection without deprecated options)
-const dbURI = 'mongodb+srv://giriprassath1s:xNc5vnzCPZMJZRP5@cluster0.gwvs2.mongodb.net/user_data?retryWrites=true&w=majority'; 
+// Connect to MongoDB Atlas
+const dbURI = 'mongodb+srv://giriprassath1s:xNc5vnzCPZMJZRP5@cluster0.gwvs2.mongodb.net/user_data?retryWrites=true&w=majority';
 mongoose.connect(dbURI)
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console.log('MongoDB connection error:', err));
@@ -60,10 +60,12 @@ app.post('/save', upload.single('photo'), async (req, res) => {
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Serve the geolocation.html file (Make sure to provide the correct absolute path)
+// Serve static files from the root directory (including the HTML files)
+app.use(express.static(path.join(__dirname)));
+
 // Serve the geolocation.html file
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'geolocation.html')); // Use correct relative path
+    res.sendFile(path.join(__dirname, 'geolocation.html')); // Serve the geolocation.html file
 });
 
 // Start the server
