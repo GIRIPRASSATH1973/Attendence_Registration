@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geolocation & Face Capture</title>
- 
+
     <style>
         body {
-            background-image:'timebg.jpg';
+            background-image: url('timebg.jpg'); /* Use correct path for your image */
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
@@ -26,16 +26,16 @@
         h1 {
             text-align: center;
             margin: 20px 0;
-            font-size: 2.5rem;
+            font-size: 2rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
 
         input[type="text"] {
-            width: 80%;
-            max-width: 640px;
+            width: 90%;
+            max-width: 500px;
             padding: 12px;
             margin: 10px 0;
-            font-size: 18px;
+            font-size: 16px;
             border: 2px solid #ffffff99;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.8);
@@ -52,10 +52,10 @@
         }
 
         #locationOutput {
-            width: 80%;
-            max-width: 640px;
-            padding: 15px;
-            font-size: 18px;
+            width: 90%;
+            max-width: 500px;
+            padding: 12px;
+            font-size: 16px;
             background-color: rgba(255, 255, 255, 0.9);
             border: 2px solid #ffffff88;
             border-radius: 8px;
@@ -66,18 +66,18 @@
         }
 
         video, canvas {
-            width: 80%;
-            max-width: 640px;
+            width: 90%;
+            max-width: 500px;
             border-radius: 10px;
             margin-bottom: 20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         button {
-            width: 80%;
-            max-width: 640px;
-            padding: 15px;
-            font-size: 18px;
+            width: 90%;
+            max-width: 500px;
+            padding: 12px;
+            font-size: 16px;
             cursor: pointer;
             background-color: #4a89d6;
             color: white;
@@ -93,9 +93,9 @@
         }
 
         #map {
-            height: 400px; /* Ensure a fixed height for the map */
-            width: 80%;
-            max-width: 640px;
+            height: 400px; 
+            width: 90%;
+            max-width: 500px;
             border-radius: 10px;
             margin: 20px 0;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
@@ -111,18 +111,32 @@
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
 
             input, video, canvas, #locationOutput, button, #map {
-                width: 90%;
+                width: 95%;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.25rem;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 14px;
             }
         }
     </style>
 
     <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDittWph821Avwsq_8JYH7o2dm0_yHd7hY
-    &callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDittWph821Avwsq_8JYH7o2dm0_yHd7hY&callback=initMap" async defer></script>
 </head>
 
 <body>
@@ -138,10 +152,10 @@
     <div id="map"></div>
 
     <!-- Webcam stream and photo capture -->
-    <video id="webcam" width="640" height="480" autoplay></video>
-    <canvas id="snapshot" width="640" height="480" style="display: none;"></canvas>
+    <video id="webcam" autoplay></video>
+    <canvas id="snapshot" style="display: none;"></canvas>
 
-    <!-- Get location button below the camera -->
+    <!-- Get location button -->
     <div id="buttonContainer">
         <button onclick="getLocation()">Get My Location</button>
     </div>
