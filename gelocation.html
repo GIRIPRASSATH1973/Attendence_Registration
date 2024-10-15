@@ -4,66 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geolocation & Face Capture</title>
+ 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background-image:'timebg.jpg';
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Poppins', Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             height: 100vh;
             margin: 0;
             padding: 0;
+            color: #fff;
         }
+
         h1 {
             text-align: center;
             margin: 20px 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
-        input, #locationOutput, #getLocationContainer, video, canvas, #map {
+
+        input[type="text"] {
             width: 80%;
             max-width: 640px;
+            padding: 12px;
             margin: 10px 0;
+            font-size: 18px;
+            border: 2px solid #ffffff99;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+            text-align: center;
+            outline: none;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
         }
+
+        input[type="text"]::placeholder {
+            color: #666;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        #locationOutput {
+            width: 80%;
+            max-width: 640px;
+            padding: 15px;
+            font-size: 18px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid #ffffff88;
+            border-radius: 8px;
+            text-align: center;
+            color: #333;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        video, canvas {
+            width: 80%;
+            max-width: 640px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
         button {
             width: 80%;
             max-width: 640px;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 15px;
+            font-size: 18px;
             cursor: pointer;
-            background-color: #4CAF50;
+            background-color: #4a89d6;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s;
         }
-        #locationOutput {
-            padding: 10px;
-            font-size: 16px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
+
+        button:hover {
+            background-color: #3b72b3;
         }
+
         #map {
-            height: 300px;
-            border-radius: 5px;
-            margin-top: 20px;
+            height: 400px; /* Ensure a fixed height for the map */
+            width: 80%;
+            max-width: 640px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1;
         }
-        #getLocationContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
+
         #buttonContainer {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
             display: flex;
             justify-content: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            input, video, canvas, #locationOutput, button, #map {
+                width: 90%;
+            }
         }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script> <!-- Replace YOUR_API_KEY -->
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDittWph821Avwsq_8JYH7o2dm0_yHd7hY
+    &callback=initMap" async defer></script>
 </head>
+
 <body>
     <h1>Get User Location & Capture Face</h1>
 
@@ -80,14 +141,14 @@
     <video id="webcam" width="640" height="480" autoplay></video>
     <canvas id="snapshot" width="640" height="480" style="display: none;"></canvas>
 
-    <!-- Get location button at the bottom -->
+    <!-- Get location button below the camera -->
     <div id="buttonContainer">
         <button onclick="getLocation()">Get My Location</button>
     </div>
 
     <script>
-        const minLat = 10.011250, maxLat = 10.019620;
-        const minLng = 77.479630, maxLng = 77.482010;
+        const minLat = 11.0180, maxLat = 11.0300;
+        const minLng = 76.9995, maxLng = 77.0093180;
 
         function isWithinRange(latitude, longitude) {
             return latitude >= minLat && latitude <= maxLat &&
@@ -95,7 +156,7 @@
         }
 
         // Initialize the map
-        function initMap(lat, lng) {
+        function initMap(lat = 11.0183, lng = 76.9745) {
             const location = { lat: lat, lng: lng };
             const map = new google.maps.Map(document.getElementById('map'), {
                 center: location,
@@ -121,17 +182,15 @@
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             document.getElementById("locationOutput").innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
-            
-            // Initialize map
+
+            // Initialize map with current position
             initMap(latitude, longitude);
 
             // Check if within the specified range
             if (isWithinRange(latitude, longitude)) {
-                console.log("Within range");
                 captureAndSave();
             } else {
                 document.getElementById("locationOutput").innerHTML = "You are out of range. Attendance cannot be registered.";
-                console.log("Out of range");
             }
         }
 
@@ -177,13 +236,12 @@
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             canvas.toBlob((blob) => {
                 const formData = new FormData();
-                formData.append('photo', blob, 'photo.png'); // Add the photo file
-                formData.append('name', name); // Add the name
-                
-                // Send data to the server (using Fetch API)
+                formData.append('photo', blob, 'photo.png');
+                formData.append('name', name);
+
                 fetch('/save', {
                     method: 'POST',
-                    body: formData // Send FormData instead of JSON
+                    body: formData
                 })
                 .then(res => res.json())
                 .then(data => console.log("Saved successfully", data))
